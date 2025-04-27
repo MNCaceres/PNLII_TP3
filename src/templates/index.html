@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatBot - Martín Cáceres</title>
+    <link rel="icon" href="static/fav.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto Flex', sans-serif;
+            background-color: #ede9fe;
+        }
+        .header {
+            background-color: #6b21a8;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #6b21a8;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            margin-top: 10px;
+        }
+        #chat-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0px 0px 10px #ccc;
+            height: 70vh;
+            overflow-y: auto;
+        }
+        .userText, .botText {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .userText {
+            background-color: #6b21a8;
+            color: white;
+            align-self: flex-end;
+        }
+        .botText {
+            background-color: #f3e8ff;
+            color: #333;
+            align-self: flex-start;
+        }
+        #userInput {
+            display: flex;
+            margin-top: 10px;
+        }
+        #textInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            #textInput { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>TP3 - LLM con razonamiento </h2>
+        <p>Martín Cáceres · FIUBA 2025</p>
+    </div>
+    <div class="container">
+        <div id="chat-container">
+            <div class="botText">
+                <span>👋 ¡Hola! Haz la consulta que necesites.</span>
+            </div>
+        </div>
+        <div id="userInput">
+            <input id="textInput" type="text" placeholder="Escribí tu consulta..." />
+        </div>
+    </div>
+    <div class="footer">
+        TP1 de PLN II · Facultad de Ingeniería, UBA · ChatBot por Martín Cáceres
+    </div>
+    <script>
+        function getBotResponse() {
+            const rawText = $("#textInput").val();
+            if (!rawText) return;
+
+            const userHtml = '<div class="userText"><span>' + rawText + "</span></div>";
+            $("#textInput").val("");
+            $("#chat-container").append(userHtml);
+            $.get("/get", { msg: rawText }).done(function (data) {
+                const botHtml = '<div class="botText"><span>' + data + "</span></div>";
+                $("#chat-container").append(botHtml);
+                $("#chat-container").scrollTop($("#chat-container")[0].scrollHeight);
+            });
+        }
+
+        $("#textInput").keypress(function (e) {
+            if (e.which == 13) getBotResponse();
+        });
+    </script>
+</body>
+</html>

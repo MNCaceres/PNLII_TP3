@@ -1,0 +1,17 @@
+transformers
+Pillow
+torch
+groq
+streamlit
+langchain
+langchain_core
+langchain_groq
+sentence-transformers
+python-dotenv
+pinecone
+openai
+matplotlib
+requests
+tiktoken
+flask 
+
